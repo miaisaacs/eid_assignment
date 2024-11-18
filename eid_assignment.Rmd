@@ -1,0 +1,38 @@
+---
+title: "EID Surveillance Assignment"
+author: "Mia Isaacs"
+date: "2024-11-18"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+flusurv_df = 
+  read_excel('data/flusurv_assignment.xlsx', na = c("99", "")) |> 
+  janitor::clean_names() |> 
+  rename( 
+    study_id = study_id1,
+    age = age_g,
+    month = month1,
+    year = year1,
+    ) |> 
+  mutate(study_id = str_sub(study_id, 8))
+
+view(flusurv_df)
+```
+
+
+
+
+
+
+
+
+
+
+
+
