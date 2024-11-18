@@ -10,6 +10,8 @@ library(tidyverse)
 library(readxl)
 ```
 
+## 2008-2013 data
+
 ```{r}
 flusurv_df = 
   read_excel('data/flusurv_assignment.xlsx', na = c("99", "")) |> 
@@ -25,8 +27,53 @@ flusurv_df =
 view(flusurv_df)
 ```
 
+# question 1 
 
+```{r}
+question1 <- flusurv_df |> 
+  filter(flu_pos == 1) |>
+  group_by(year, month) |>
+  summarize(
+    flu_pos_count = n(),
+    .groups = "drop"           
+  )
 
+view(question1)
+```
+
+# question 2
+
+```{r}
+question2 <- flusurv_df |> 
+  filter(year == 2012 & month >= 7 | year == 2013 & month <= 6) |> 
+  summarize(
+    flu_a_count = sum(flu_a, na.rm = TRUE),
+    pre_2009_h1n1_count = sum(pre_2009_h1n1, na.rm = TRUE),
+    a_h3n2_count = sum(a_h3n2, na.rm = TRUE),
+    swinf_count = sum(swinf, na.rm = TRUE),
+    h5_count = sum(h5, na.rm = TRUE),
+    flu_b_count = sum(flu_b, na.rm = TRUE)
+  )
+
+question2
+```
+
+# question 3
+
+```{r}
+flusurv2014_df =
+  read_excel('data/flusurv_assignment.xlsx', sheet = 'New 2014 Data', na = c("99", "")) |> 
+  janitor::clean_names() |> 
+  rename( 
+    study_id = study_id1,
+    age = age_g,
+    month = month1,
+    year = year1,
+    ) |> 
+  mutate(study_id = str_sub(study_id, 8))
+
+view(flusurv2014_df)
+```
 
 
 
