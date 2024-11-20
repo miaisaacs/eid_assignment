@@ -55,7 +55,7 @@ question2 <- flusurv_df |>
     flu_b_count = sum(flu_b, na.rm = TRUE)
   )
 
-question2
+view(question2)
 ```
 
 # question 3
@@ -75,7 +75,48 @@ flusurv2014_df =
 view(flusurv2014_df)
 ```
 
+```{r}
+flu_2014_sum <- flusurv2014_df |> 
+  filter(epi_week >= 2 & epi_week <= 15, flu_pos == 1) |> 
+  group_by(epi_week) |> 
+  summarize(
+    flu_pos_count = n(),
+    .groups = "drop")
 
+view(flu_2014_sum)
+```
+
+# question 4
+
+```{r}
+question4 <- flusurv2014_df |> 
+  filter(epi_week >= 2 & epi_week <= 15) |>         
+  mutate(
+    epi_week_group = case_when(
+      epi_week >= 2 & epi_week <= 12 ~ "2-12",
+      epi_week >= 13 & epi_week <= 15 ~ "13-15"
+    )
+  ) |> 
+  group_by(epi_week_group) |>                       
+  summarize(
+    
+    total_count_age = sum(!is.na(age)),
+    age_15_49 = sum(age == 4, na.rm = TRUE),  
+    age_proportion = age_15_49 / total_count_age,
+    
+    total_count_icu = sum(!is.na(icu)),
+    icu_count = sum(icu == 1, na.rm = TRUE),
+    icu_proportion = icu_count / total_count_icu,
+    
+    total_count_outcome = sum(!is.na(outcome)),
+    outcome_count = sum(outcome == 3, na.rm = TRUE),
+    outcome_proportion = outcome_count / total_count_outcome,
+    
+    .groups = "drop"
+  )
+
+view(question4)
+```
 
 
 
